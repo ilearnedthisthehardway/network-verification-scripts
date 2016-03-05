@@ -15,7 +15,6 @@ if [[ -z $location ]] || $(echo $location | grep -i Raleigh); then
     echo "No internet connection, but Plex is running [$(date)]" >> /root/reboot.log;
   else
     /etc/update-motd.d/50-landscape-sysinfo | sed -e '/Graph/d' -e '/canonical/d' >> /root/reboot.log;
-    echo "[$location]" >> /root/reboot.log;
     /sbin/reboot;
   fi;
 fi;

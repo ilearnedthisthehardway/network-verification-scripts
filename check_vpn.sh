@@ -11,9 +11,13 @@
 location=$(curl -ks https://www.dnsleaktest.com | grep -A1 Hello);
 
 if [[ -z $location ]] || $(echo $location | grep -i Raleigh); then
-  /etc/update-motd.d/50-landscape-sysinfo | sed -e '/Graph/d' -e '/canonical/d' >> /root/reboot.log;
-  echo "[$location]" >> /root/reboot.log;
-  /sbin/reboot;
+  if ps -Ao pcpu,user,args --no-headers --sort=-pcpu |  head -n5 | grep -i plex >/dev/null; then
+    echo "No internet connection, but Plex is running [$(date)]" >> /root/reboot.log;
+  else
+    /etc/update-motd.d/50-landscape-sysinfo | sed -e '/Graph/d' -e '/canonical/d' >> /root/reboot.log;
+    echo "[$location]" >> /root/reboot.log;
+    /sbin/reboot;
+  fi;
 fi;
 
 exit;
